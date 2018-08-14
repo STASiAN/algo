@@ -2,3 +2,6 @@
   yum:
     name: epel-release
     state: latest
+- lineinfile:
+    path: /etc/protocols
+    line: 'ipencap	4	IP-ENCAP	# IP encapsulated in IP (officially "IP")'
