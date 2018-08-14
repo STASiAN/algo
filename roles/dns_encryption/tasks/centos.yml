@@ -26,7 +26,7 @@
     path:  /usr/lib/systemd/system/dnscrypt-proxy.service
     state: absent
     regexp: 'dnscrypt-proxy.socket'
-  when: local_dns|bool == true
+  when: local_dns|d(false)|bool == true
   notify:
    - restart dnscrypt-proxy
 
