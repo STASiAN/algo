@@ -23,11 +23,25 @@
     owner: root
     group: root
 
+- name: CentOS | Remove default configs
+  file:
+    dest: '/etc/strongswan/{{ item }}'
+    state: absent
+  with_items: "{{ configs }}"
+  
 - name: CentOS | Ensure that the ipsec.d service directory exist
   file:
     src: /etc/strongswan/ipsec.d 
     dest: /etc/ipsec.d
     state: link
+  
+- name: CentOS | Ensure that the configs symlinks exists
+  file:
+    src: '/etc/{{ item }}'
+    dest: '/etc/strongswan/{{ item }}'
+    state: link
+    force: yes
+  with_items: "{{ configs }}"
 
 - name: CentOS | Setup the cgroup limitations for the ipsec daemon
   template:
