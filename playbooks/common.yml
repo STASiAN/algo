@@ -6,10 +6,14 @@
 
 - name: Ubuntu pre-tasks
   include_tasks: ubuntu.yml
-  when: '"Ubuntu" in OS.stdout or "Linux" in OS.stdout'
+  when: '"Ubuntu" in OS.stdout in OS.stdout'
 
 - name: FreeBSD pre-tasks
   include_tasks: freebsd.yml
   when: '"FreeBSD" in OS.stdout'
+
+- name: CentOS pre-tasks
+  include_tasks: centos.yml
+  when: ansible_distribution == 'CentOS'
 
 - include_tasks: facts/main.yml

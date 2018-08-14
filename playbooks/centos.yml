@@ -1,0 +1,4 @@
+- name: CentOS | Install prerequisites
+  yum:
+    name: epel-release
+    state: latest
