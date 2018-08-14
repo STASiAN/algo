@@ -587,6 +587,7 @@ algo_provisioning () {
     5. Scaleway
     6. OpenStack (DreamCompute optimised)
     7. Install to existing Ubuntu 16.04 server (Advanced)
+    8. Install to existing Centos 7.4 server (Advanced)
 
 Enter the number of your desired provider
 : "
@@ -601,6 +602,7 @@ Enter the number of your desired provider
     5) scaleway; ;;
     6) openstack; ;;
     7) non_cloud; ;;
+    8) non_cloud; ;;
     *) exit 1 ;;
   esac
 

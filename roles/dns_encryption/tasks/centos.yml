@@ -1,0 +1,31 @@
+---
+- name: Add the repository
+  yum_repository:
+    name: eclipseo-dnscrypt-proxy
+    description: Copr repo for dnscrypt-proxy owned by eclipseo
+    baseurl: https://copr-be.cloud.fedoraproject.org/results/eclipseo/dnscrypt-proxy/fedora-28-x86_64/
+    gpgkey: https://copr-be.cloud.fedoraproject.org/results/eclipseo/dnscrypt-proxy/pubkey.gpg
+    gpgcheck: yes
+
+- name: Install dnscrypt-proxy
+  yum:
+    name: dnscrypt-proxy
+    state: latest
+    update_cache: true
+
+- name: CentOS | Ensure that the dnscrypt-proxy service directory exist
+  file:
+    path: /etc/systemd/system/dnscrypt-proxy.service.d/
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: CentOS | Add capabilities to bind ports
+  copy:
+    dest: /etc/systemd/system/dnscrypt-proxy.service.d/99-capabilities.conf
+    content: |
+      [Service]
+      AmbientCapabilities=CAP_NET_BIND_SERVICE
+  notify:
+   - restart dnscrypt-proxy
