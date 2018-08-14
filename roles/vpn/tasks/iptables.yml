@@ -11,6 +11,7 @@
     - { src: rules.v4.j2, dest: /etc/iptables/rules.v4 }
   notify:
     - restart iptables
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Iptables configured
   template:
@@ -19,8 +20,34 @@
     owner: root
     group: root
     mode: 0640
-  when: ipv6_support
+  when: ipv6_support and (ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu')
   with_items:
     - { src: rules.v6.j2, dest: /etc/iptables/rules.v6 }
   notify:
     - restart iptables
+  
+- name: Iptables configured
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items:
+    - { src: rules.v4.j2, dest: /etc/sysconfig/iptables }
+  notify:
+    - restart centos iptables
+  when: ansible_distribution == 'CentOS'
+
+- name: Iptables configured
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  when: ipv6_support and ansible_distribution == 'CentOS'
+  with_items:
+    - { src: rules.v6.j2, dest: /etc/sysconfig/ip6tables }
+  notify:
+    - restart centos ip6tables

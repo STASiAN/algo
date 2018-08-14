@@ -15,3 +15,9 @@
 
 - name: rereadcrls
   shell: ipsec rereadcrls; ipsec purgecrls
+
+- name: restart centos iptables
+  service: name=iptables state=restarted
+
+- name: restart centos ip6tables
+  service: name=ip6tables state=restarted

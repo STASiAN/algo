@@ -7,12 +7,33 @@
   until: result|succeeded
   retries: 10
   delay: 3
+  when: ansible_distribution == 'Ubuntu'
+
+- name: WireGuard reposity configured
+  shell:  yum-config-manager --add-repo=https://copr.fedorainfracloud.org/coprs/jdoss/wireguard/repo/epel-7/jdoss-wireguard-epel-7.repo
+  register: result
+  until: result|succeeded
+  retries: 10
+  delay: 3
+  when: ansible_distribution == 'CentOS'
 
 - name: WireGuard installed
   apt:
     name: wireguard
     state: present
     update_cache: true
+  when: ansible_distribution == 'Ubuntu'
+
+- name: WireGuard installed
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+      - wireguard-dkms
+      - wireguard-tools
+    state: present
+    update_cache: true
+  when: ansible_distribution == 'CentOS'
 
 - name: Configure unattended-upgrades
   copy:
@@ -21,6 +42,7 @@
     owner: root
     group: root
     mode: 0644
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Ensure the required directories exist
   file:
@@ -32,6 +54,12 @@
     - public
   delegate_to: localhost
   become: false
+
+- name: Create WireGuard folder
+  file:
+    path: /etc/wireguard
+    state: directory
+    mode: 0755
 
 - name: Generate keys
   import_tasks: keys.yml

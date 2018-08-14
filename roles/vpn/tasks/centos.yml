@@ -1,0 +1,41 @@
+---
+
+- set_fact:
+    strongswan_additional_plugins: []
+
+- name: CentOS | Install strongSwan
+  yum:
+    name: strongswan
+    state: latest
+    update_cache: yes
+
+- name: CentOS | Enable services
+  service: name={{ item }} enabled=yes
+  with_items:
+    - strongswan
+    - iptables
+
+- name: CentOS | Ensure that the strongswan service directory exist
+  file:
+    path: /etc/systemd/system/strongswan.service.d/
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: CentOS | Ensure that the ipsec.d service directory exist
+  file:
+    src: /etc/strongswan/ipsec.d 
+    dest: /etc/ipsec.d
+    state: link
+
+- name: CentOS | Setup the cgroup limitations for the ipsec daemon
+  template:
+    src: 100-CustomLimitations.conf.j2
+    dest: /etc/systemd/system/strongswan.service.d/100-CustomLimitations.conf
+  notify:
+    - daemon-reload
+    - restart strongswan
+
+- include_tasks: iptables.yml
+  tags: iptables
