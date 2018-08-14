@@ -6,6 +6,7 @@ openssl_bin: openssl
 strongswan_enabled_plugins:
   - aes
   - gcm
+  - eap-tls
   - hmac
   - kernel-netlink
   - nonce

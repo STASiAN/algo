@@ -36,3 +36,8 @@ conn %default
 
 conn ikev2-pubkey
     auto=add
+
+conn ikev2-eap-tls
+    also="ikev2-pubkey"
+    rightauth=eap-tls
+    eap_identity=%identity
