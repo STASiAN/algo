@@ -77,7 +77,7 @@
       - coreutils
       - libcgroup-tools
       - iptables-services
-      - "openssl{% if install_headers|default(true)|bool %},kernel-headers-{{ ansible_kernel }}{% endif %}"
+      - "openssl{% if install_headers|default(true)|bool %},kernel-headers{% endif %}"
     sysctl:
       - item: net.ipv4.ip_forward
         value: 1
