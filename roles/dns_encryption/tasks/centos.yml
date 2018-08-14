@@ -21,6 +21,15 @@
     owner: root
     group: root
 
+- name: CentOS | Remove dnscrypt-proxy socket
+  lineinfile:
+    path:  /usr/lib/systemd/system/dnscrypt-proxy.service
+    state: absent
+    regexp: 'dnscrypt-proxy.socket'
+  when: local_dns|bool == true
+  notify:
+   - restart dnscrypt-proxy
+
 - name: CentOS | Add capabilities to bind ports
   copy:
     dest: /etc/systemd/system/dnscrypt-proxy.service.d/99-capabilities.conf

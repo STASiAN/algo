@@ -104,8 +104,11 @@ stop-dns-rebind
 
 # If you want dnsmasq to change uid and gid to something other
 # than the default, edit the following lines.
+{% if ansible_distribution == 'CentOS' %}
+user=nobody
+group=nobody{% else %}
 user=dnsmasq
-group=nogroup
+group=nogroup{% endif %}
 
 # If you want dnsmasq to listen for DHCP and DNS requests only on
 # specified interfaces (and the loopback) give the name of the
